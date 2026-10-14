@@ -1,0 +1,481 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mi cuerpo en movimiento</title></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: misma estructura del AVA de atletismo (barra fija, camino por zonas, vista por semana con panel lateral). Zona 1 = Mi cuerpo, Zona 2 = Me muevo. */
+:root {
+  --bg: #F4F6FC;
+  --surface: #FFFFFF;
+  --navy: #1B2340;
+  --ink: #3A4266;
+  --muted: #5B6280;
+  --line: #D9DEEE;
+  --gold: #F4B942;
+  --gold-ink: #1B2340;
+  --cuerpo: #6A3FB5;
+  --mueve: #1F7A4D;
+  --agua: #2A78C8;
+  --inicio: var(--navy);
+  --zc: var(--cuerpo);
+  --soft: #EBEFFA;
+  --on-zone: #FFFFFF;
+  --display: 'Fredoka', 'Trebuchet MS', sans-serif;
+  --body: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1426; --surface: #181F38; --navy: #E8ECFA; --ink: #C3CAE4; --muted: #99A2C4;
+    --line: #2C3557; --gold: #F4B942; --gold-ink: #1B2340; --cuerpo: #B79BF0; --mueve: #46B07D; --agua: #6DB2F2;
+    --soft: #202949; --on-zone: #0F1426; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1426; --surface: #181F38; --navy: #E8ECFA; --ink: #C3CAE4; --muted: #99A2C4;
+  --line: #2C3557; --gold: #F4B942; --gold-ink: #1B2340; --cuerpo: #B79BF0; --mueve: #46B07D; --agua: #6DB2F2;
+  --soft: #202949; --on-zone: #0F1426; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55; padding-inline: 0; }
+h1, h2, h3, h4 { font-family: var(--display); color: var(--navy); margin: 0; text-wrap: balance; line-height: 1.12; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
+.wrap { max-width: 1120px; margin-inline: auto; padding-inline: 16px; }
+
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
+.topbar .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding-block: 10px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; min-height: 44px; }
+.logo { width: 44px; height: 44px; border-radius: 12px; background: var(--navy); color: var(--bg); display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 20px; }
+.brand strong { display: block; font-family: var(--display); font-size: 19px; color: var(--navy); line-height: 1.1; }
+.brand span span { font-size: 14px; color: var(--muted); }
+.nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.nav a { display: flex; align-items: center; min-height: 44px; padding-inline: 14px; font-weight: 800; text-decoration: none; color: var(--navy); border-radius: 10px; }
+.nav a:hover { background: var(--soft); }
+.badge { display: flex; align-items: center; min-height: 40px; padding-inline: 16px; border-radius: 999px; background: var(--navy); color: var(--bg); font-size: 14px; font-weight: 800; }
+
+.hero { padding-block: 48px 32px; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+.chip { display: inline-block; padding: 6px 14px; border-radius: 999px; background: var(--gold); color: var(--gold-ink); font-size: 13px; font-weight: 800; letter-spacing: .08em; }
+.hero h1 { font-size: clamp(38px, 6vw, 64px); margin-block: 16px; }
+.hero p { font-size: 20px; max-width: 540px; }
+.hero .ask { margin-top: 16px; padding: 14px 18px; background: var(--soft); border-radius: 18px; font-weight: 700; color: var(--navy); font-size: 18px; max-width: 540px; }
+.body-art { background: var(--surface); border: 2px solid var(--line); border-radius: 28px; padding: 20px; margin: 0; }
+.body-art svg { width: 100%; height: auto; display: block; }
+.body-art figcaption { margin-top: 10px; font-size: 14px; color: var(--muted); }
+
+.section { padding-block: 32px; }
+.section > .wrap > h2 { font-size: clamp(28px, 4vw, 38px); margin-bottom: 8px; }
+.section > .wrap > .lead { margin-bottom: 24px; max-width: 640px; }
+.zone { margin-bottom: 32px; }
+.zone-head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 14px; }
+.zone-head h3 { font-size: 24px; }
+.zone-tag { padding: 5px 14px; border-radius: 999px; background: var(--zc); color: var(--on-zone); font-size: 13px; font-weight: 800; letter-spacing: .06em; }
+.weeks { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+.week { display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 20px; background: var(--surface); border: 2px solid var(--line); border-radius: 22px; text-decoration: none; min-height: 44px; }
+a.week:hover { border-color: var(--zc); }
+.week .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.num { width: 40px; height: 40px; border-radius: 50%; background: var(--zc); color: var(--on-zone); display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 20px; flex: none; }
+.kind { font-size: 12px; font-weight: 800; letter-spacing: .1em; color: var(--muted); }
+.week h4 { font-size: 21px; }
+.week p { font-size: 15.5px; flex: 1; }
+.go { font-weight: 800; color: var(--zc); font-size: 15px; }
+
+
+.passport { background: var(--surface); border: 2px solid var(--line); border-radius: 26px; padding: 24px; }
+.stamps { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 14px; }
+.stamp { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; font-size: 14px; font-weight: 700; }
+.stamp i { width: 64px; height: 64px; border-radius: 50%; border: 3px dashed var(--line); display: grid; place-items: center; font-style: normal; font-family: var(--display); font-size: 22px; color: var(--muted); }
+.note-small { margin-top: 16px; font-size: 14.5px; color: var(--muted); }
+
+.families { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.fam { padding: 22px; background: var(--soft); border-radius: 22px; }
+.fam h3 { font-size: 21px; margin-bottom: 8px; }
+
+.week-hero { background: var(--zc); color: var(--on-zone); padding-block: 36px; }
+.week-hero .wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.week-hero h1 { color: var(--on-zone); font-size: clamp(32px, 5vw, 52px); }
+.week-hero p { font-size: 19px; max-width: 680px; }
+.week-hero .chip { background: var(--on-zone); color: var(--zc); }
+.crumb { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 800; text-decoration: none; }
+.week-main { padding-block: 32px 56px; }
+.week-main .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 32px; align-items: start; }
+.col { display: flex; flex-direction: column; gap: 32px; min-width: 0; }
+.video { aspect-ratio: 16 / 9; max-width: 100%; border-radius: 22px; background: var(--navy); color: var(--bg); display: grid; place-items: center; align-content: center; gap: 14px; padding: 24px; text-align: center; }
+.play { width: 80px; height: 80px; border-radius: 50%; background: var(--zc); display: grid; place-items: center; }
+.video + .note { margin-top: 10px; font-size: 15px; color: var(--muted); }
+.block h2 { font-size: 28px; margin-bottom: 14px; }
+.block-head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 14px; }
+.block-head h2 { margin: 0; }
+.cards3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+.card { padding: 20px; background: var(--surface); border: 2px solid var(--line); border-radius: 20px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.card.step { border-color: var(--zc); }
+.card h3 { font-size: 20px; }
+.card .num { width: 34px; height: 34px; font-size: 17px; }
+.card p { font-size: 16px; }
+.eval { padding: 24px; background: var(--soft); border-radius: 24px; }
+.eval h2 { font-size: 26px; margin-bottom: 4px; }
+.eval .hint { margin-bottom: 14px; }
+.opts { display: flex; flex-wrap: wrap; gap: 10px; }
+.opts button { min-height: 48px; padding-inline: 20px; border-radius: 999px; border: 2px solid var(--navy); background: var(--surface); color: var(--navy); font: 800 16px var(--body); cursor: pointer; }
+.opts button:hover { background: var(--bg); }
+.opts button[aria-pressed="true"] { background: var(--navy); color: var(--bg); }
+.eval .own { margin-top: 12px; font-size: 14px; color: var(--muted); }
+.pager { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.pg { display: flex; flex-direction: column; gap: 4px; padding: 16px 20px; border: 2px solid var(--navy); border-radius: 20px; text-decoration: none; min-height: 44px; }
+.pg:last-child { text-align: right; }
+.pg:hover { background: var(--navy); color: var(--bg); }
+.pg:hover .pg-title { color: var(--bg); }
+.pg-dir { font-size: 13px; font-weight: 800; letter-spacing: .06em; }
+.pg-title { font-family: var(--display); font-weight: 600; font-size: 19px; line-height: 1.2; color: var(--navy); }
+
+.side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.panel { padding: 20px; background: var(--surface); border: 2px solid var(--line); border-radius: 20px; display: flex; flex-direction: column; gap: 10px; }
+.panel h2 { font-size: 21px; }
+.panel .cl { font-size: 13px; font-weight: 800; letter-spacing: .06em; color: var(--zc); margin-bottom: 4px; }
+.panel p { font-size: 15.5px; }
+.panel hr { border: 0; border-top: 1px solid var(--line); margin: 6px 0; width: 100%; }
+.check { margin: 0; padding-left: 20px; font-size: 15.5px; }
+.panel.tip { background: var(--soft); border-color: transparent; }
+.footer { padding-block: 24px 40px; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); }
+
+
+.video.yt { padding: 0; overflow: hidden; background: #000; }
+.video.yt iframe { width: 100%; height: 100%; border: 0; display: block; }
+a.video.linkcard { text-decoration: none; color: var(--bg); }
+a.video.linkcard:hover { background: var(--ink); }
+.video + .note a, .note a { font-weight: 800; color: var(--navy); }
+.art { margin: 0; background: var(--soft); border-radius: 22px; padding: 12px; }
+.art svg { width: 100%; height: auto; display: block; }
+.art figcaption { padding: 8px 8px 4px; font-size: 15px; color: var(--muted); }
+
+.quiz { background: var(--surface); border: 2px solid var(--zc); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.qhead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.qstars { display: flex; flex-wrap: wrap; gap: 4px; }
+.qstars svg { width: 26px; height: 26px; }
+.quiz h2 { font-size: clamp(24px, 4vw, 32px); }
+.quiz h2:focus { outline: none; }
+.qopts { display: grid; gap: 12px; }
+.qopt { display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 12px 18px; border-radius: 18px; border: 2px solid var(--navy); background: var(--surface); color: var(--navy); font: 700 18px var(--body); text-align: left; cursor: pointer; }
+.qopt:hover { background: var(--soft); }
+.qopt .k { width: 34px; height: 34px; border-radius: 50%; background: var(--soft); display: grid; place-items: center; font-family: var(--display); font-weight: 600; flex: none; }
+.qopt.good { border-color: var(--mueve); background: var(--soft); }
+.qopt.good .k { background: var(--mueve); color: var(--on-zone); }
+.qopt.miss { border-style: dashed; color: var(--muted); }
+.qfb { min-height: 1.6em; font-weight: 700; color: var(--navy); font-size: 18px; }
+.qbtn { align-self: flex-start; min-height: 48px; padding-inline: 24px; border-radius: 999px; border: 0; background: var(--navy); color: var(--bg); font: 800 17px var(--body); cursor: pointer; }
+.qdone { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.qdone .qstars svg { width: 40px; height: 40px; }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: minmax(0, 1fr); gap: 24px; padding-block: 32px 16px; }
+  .week-main .wrap { grid-template-columns: minmax(0, 1fr); }
+  .badge { display: none; }
+}
+@media (max-width: 560px) {
+  .pager { grid-template-columns: minmax(0, 1fr); }
+  .pg:last-child { text-align: left; }
+  .nav a { padding-inline: 10px; }
+  .play { width: 60px; height: 60px; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+</style>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#inicio">
+      <span class="logo" aria-hidden="true">EF</span>
+      <span><strong>Educación Física</strong><span>Colegio San José de las Vegas</span></span>
+    </a>
+    <nav class="nav" aria-label="Menú del AVA">
+      <a href="#inicio">El camino</a>
+      <a href="#pasaporte">Mi pasaporte</a>
+      <a href="#familias">Para las familias</a>
+      <span class="badge">Grado 1° · Periodo 1</span>
+    </nav>
+  </div>
+</header>
+
+<main id="view"></main>
+
+<footer class="footer"><div class="wrap">Educación Física · Grado 1° · Periodo 1 · Movimientos naturales y esquema corporal</div></footer>
+
+<script>
+var W = {
+1:{zone:"cuerpo",kind:"MI CUERPO",short:"Conozco mi cuerpo",card:"Nombro las partes de mi cuerpo, dibujo mi silueta con tiza y exploro con pelotas.",chip:"SEMANA 1 · ZONA 1 · MI CUERPO",h1:"Conozco mi cuerpo: ¿qué puedo hacer con él?",sub:"Reconozco las partes de mi cuerpo y descubro cómo se mueven cuando juego con una pelota.",video:"de las partes del cuerpo",stepsTitle:"Lo que vamos a practicar",
+ steps:[["Nombro mis partes","Señalo la cabeza, el tronco, los brazos y las piernas, y encuentro dónde se doblan: mis articulaciones."],["Dibujo mi silueta","En parejas, uno se acuesta y el otro dibuja su contorno con tiza. Después marcamos los sentidos y las articulaciones."],["Exploro con la pelota","La lanzo, la atrapo, la hago rebotar y rodar, y la golpeo con distintas partes del cuerpo."]],
+ ideas:[["Simón dice","Un familiar dice «toca tu codo, toca tu rodilla». Cambien de turno."],["Mi silueta en el patio","Dibujen con tiza el contorno de tu cuerpo y pon un nombre a cada parte."],["Así cuido mi cuerpo","Representa con mímica una forma de cuidarte: bañarte, dormir, comer o jugar. Tu familia adivina."]],
+ classes:[["CLASE 1 · MI CUERPO Y MI SILUETA","Silencio, relajación y calentamiento. En equipos representan una forma de cuidar el cuerpo. En parejas pintan su silueta con tiza y dibujan los sentidos y las articulaciones. Cierre con relajación con pelota plástica."],["CLASE 2 · EXPLORO CON PELOTAS","Calentamiento con rondas y desplazamientos (gusano, gateo, caminar en cuclillas). Exploración libre con pelotas perladas, solos, en parejas y en grupos."]],
+ matClase:"tizas y pelotas perladas.",matCasa:"tiza o papel grande, y una pelota liviana.",tip:"Jueguen a nombrar las partes del cuerpo sin corregir con prisa. Lo importante es que su estudiante las señale con seguridad.",
+ obs:["Nombra y señala las partes de su cuerpo.","Escucha las indicaciones y participa con disposición."]},
+2:{zone:"cuerpo",kind:"AUTOCUIDADO",short:"Me cuido y lanzo aros",card:"Aprendo los mandamientos del autocuidado y hago mi primera prueba de lanzar aros.",chip:"SEMANA 2 · ZONA 1 · MI CUERPO",h1:"Me cuido y cuido las cosas de la clase",sub:"Aprendo cómo cuidar mi cuerpo y los materiales, y hago una prueba de coordinación con aros.",video:"del autocuidado",stepsTitle:"Cómo me cuido en clase",
+ steps:[["Los mandamientos del autocuidado","Aprendemos qué hacer para cuidar nuestro cuerpo: higiene, hidratación y calentar antes de jugar."],["Uso bien los materiales","Conocemos cómo comportarnos en la bodega y cómo usar y guardar los implementos."],["Lanzo aros al cono","Lanzo cinco aros e intento encestarlos en un cono. Cuento mis aciertos."]],
+ ideas:[["Mi dibujo del autocuidado","Dibuja con tu familia las reglas para cuidarte. Llévalo a clase."],["Mi botella de agua","Prepara tu botella antes de cada clase y cuéntale a tu familia cuándo tomas agua."],["Lanza al balde","Lanza prendas enrolladas a un balde desde una marca. ¿Cuántas encestas de cinco?"]],
+ classes:[["CLASE 1 · AUTOCUIDADO","Ronda y juego de calentamiento. Definimos el autocuidado y sus mandamientos (en el salón o como dibujo para la casa). Cómo usar la bodega. Relevo del túnel con sus variantes."],["CLASE 2 · PRUEBA DE LANZAMIENTO","Calentamiento y juego del detective. Prueba de coordinación visomanual: lanzar cinco aros a un cono. Mientras evalúo a un grupo, los demás juegan con cuerdas, aros y pelotas."]],
+ matClase:"copias, aros, cono, cuerdas y pelotas.",matCasa:"hojas, colores, un balde y prendas enrolladas.",tip:"Ayuden a su estudiante a revisar su uniforme y su botella de agua antes de la clase. Es parte de cuidarse.",
+ obs:["Lanza y encesta aros con coordinación progresiva.","Cuida su cuerpo y los implementos, y respeta las normas."]},
+3:{zone:"cuerpo",kind:"ESPACIO",short:"Mi circuito de aros",card:"Salto con aros de distintas formas y sigo un circuito recordando el recorrido.",chip:"SEMANA 3 · ZONA 1 · MI CUERPO",h1:"Saltos con aros: mi punto de partida",sub:"Practico saltos con aros y sigo un circuito con buena memoria de movimiento. Repetiremos esta prueba al final del año.",video:"del circuito de aros",stepsTitle:"Cómo lo practicamos",
+ steps:[["Salto con aros","Salto con los dos pies, con el pie izquierdo, con el derecho, en soldadito y en golosa."],["Salto en todas las direcciones","Con un aro, salto adelante, atrás, a los lados y en forma de cruz."],["Sigo el circuito","Recorro los aros en el orden indicado. Cada error suma, así que recuerdo el camino."]],
+ ideas:[["Golosa en casa","Dibuja una golosa con tiza y salta con un pie y con los dos."],["Circuito de memoria","Con cojines o cuerdas, arma un recorrido. Recórrelo con los ojos abiertos y luego repítelo de memoria."],["Mis saltos","Cuéntale a tu familia cuál salto fue más fácil y cuál más difícil."]],
+ classes:[["CLASE 1 · PREPARACIÓN CON AROS","Rondas y desplazamientos en tres hileras. Saltos con aros de distintas formas y juego libre con aros, mientras el profesor observa."],["CLASE 2 · EL CIRCUITO","Los aros se ubican en circuito y cada estudiante lo recorre. Se anotan los errores y los resultados se guardan para compararlos al final del año."]],
+ matClase:"aros, pelotas gigantes y pequeñas, y cuerdas.",matCasa:"tiza, cojines o cuerdas.",tip:"No comparen con otros niños. Esta prueba es para que cada estudiante vea cuánto mejora al final del año.",
+ obs:["Salta y se ubica en el espacio con aros y conos.","Participa con seguridad y acepta sus errores sin desanimarse."]},
+4:{zone:"cuerpo",kind:"LATERALIDAD",short:"Derecha e izquierda",card:"Distingo mi lado derecho y mi lado izquierdo en juegos de olas, esquinas y ardillas.",chip:"SEMANA 4 · ZONA 1 · MI CUERPO",h1:"Derecha e izquierda: ¿hacia dónde me muevo?",sub:"Aprendo a distinguir mi lado derecho y mi lado izquierdo mientras juego.",video:"de la derecha y la izquierda",stepsTitle:"Los juegos de la semana",
+ steps:[["Las olas","Estoy dentro de un aro. Si dicen «ola a la derecha», salto al aro de la derecha. «Marea baja» es adelante y «marea alta», atrás."],["Cuatro esquinas","Un jugador del centro dice derecha o izquierda y todos corremos hacia ese lado."],["Las ardillas","Dos círculos giran en sentidos contrarios. Al decir «ardillas», cada ardilla entra a la cueva de su pareja."]],
+ ideas:[["Mano derecha, mano izquierda","Ponte una cinta en la mano derecha. Toca con ella tu rodilla izquierda y tu hombro izquierdo."],["Pisa la cuerda","Con un familiar, intenta pisar con tu pie derecho la cuerda que lleva en la cintura, y luego con el izquierdo."],["Hacia dónde voy","Un adulto dice derecha o izquierda y tú caminas hacia ese lado."]],
+ classes:[["CLASE 1 · LAS OLAS Y LA FRONTERA","Ronda y juego de cuerda en la cintura. Juego de las olas con aros y chucha la frontera. Quien se equivoca ayuda a dar la señal. Juego por parejas de tocar partes del cuerpo."],["CLASE 2 · ESQUINAS Y ARDILLAS","Juego de las cuatro esquinas, chucha de las ardillas y goleo con la parte del cuerpo que indique el profesor."]],
+ matClase:"aros, cuerdas, petos y pelotas.",matCasa:"una cinta de color y una cuerda.",tip:"Pongan una cinta en la mano derecha de su estudiante para ayudarle a distinguir los lados.",
+ obs:["Reconoce su lado derecho y su lado izquierdo.","Respeta las reglas del juego y espera su turno."]},
+5:{zone:"cuerpo",kind:"ESPACIO",short:"Dónde estoy",card:"Me ubico con aros y conos, y con mi equipo invento un juego.",chip:"SEMANA 5 · ZONA 1 · MI CUERPO",h1:"Dónde estoy: aros, conos y trabajo en equipo",sub:"Aprendo a ubicarme en el espacio, a saltar con aros y a crear un juego con mi equipo.",video:"de la orientación espacial",stepsTitle:"Lo que vamos a hacer",
+ steps:[["Salto el aro de mi compañera","Una compañera sostiene el aro. Salto por encima, por debajo o entro y salgo saltando."],["Torre de conos","En relevo, cada equipo lleva sus cuatro conos y arma una torre."],["Invento un juego","En equipos de hasta 6 creamos un juego con aros y conos. Lo practicamos y lo mostramos."]],
+ ideas:[["Pasa el aro","Con un aro o un cinturón, pasa tu cuerpo por dentro y por fuera sin tocarlo."],["Camino de aros","Pon aros o cuerdas en forma de cuadro y salta siguiendo el camino."],["Invento un juego","Con tu familia, inventen un juego con vasos plásticos y una pelota. Escriban las reglas."]],
+ classes:[["CLASE 1 · ARCOS Y CONOS","Relevo con conos y torre. Saltos de aros sostenidos por compañeras, en equipos de 8. Juegos por parejas con blanco móvil e inmóvil."],["CLASE 2 · MI JUEGO","Cada equipo practica y muestra su propuesta de juego con aros y conos. Circuito de aros y juego de pañuelito."]],
+ matClase:"aros y conos.",matCasa:"aros o cuerdas, vasos plásticos y una pelota.",tip:"Pídanle a su estudiante que les explique las reglas de su juego. Explicar también es aprender.",
+ obs:["Se ubica en el espacio y se desplaza entre aros y conos.","Colabora con su equipo y aporta ideas."]},
+6:{zone:"mueve",kind:"CORRER Y SALTAR",short:"Corro, salto y repto",card:"Camino, troto, corro, salto y repto. También calculo cuánto dura un minuto.",chip:"SEMANA 6 · ZONA 2 · ME MUEVO",h1:"Corro, salto y repto",sub:"Practico los movimientos naturales de desplazamiento y descubro cuánto dura un minuto.",video:"de los desplazamientos",stepsTitle:"Cómo me desplazo",
+ steps:[["Camino, troto y corro","Cambio de velocidad cuando escucho la señal, solo y en grupo."],["¿Cuánto dura un minuto?","Corro durante un minuto y luego intento parar solo cuando creo que ya pasó."],["Reptar, gatear y rolar","Subo la montaña con la cuerda y regreso como cangrejito, rodando, reptando o gateando."]],
+ ideas:[["Un minuto en casa","Un familiar cuenta un minuto con el reloj. Tú te quedas en silencio y levantas la mano cuando creas que pasó."],["Animales en movimiento","Camina como un gigante, un enano, una rana o un avestruz."],["Globo en el aire","Con un adulto cerca, mantén un globo en el aire con la mano sin que toque el piso."]],
+ classes:[["CLASE 1 · UN MINUTO Y DESPLAZAMIENTOS","Desplazamientos y carreras por grupos y parejas. Ejercicio de tiempo: correr un minuto. Golpear pelotas y globos con el pie y con la mano. Juego de pasar el campo."],["CLASE 2 · RELEVOS Y REPTAR","Relevo saltando conos o vallas bajas con un pie y con los dos pies. Relevo de escalar con cuerda larga y volver como cangrejito, rolando, reptando o gateando."]],
+ matClase:"globos, pelotas, conos, vallas bajas y cuerdas largas.",matCasa:"un reloj, un globo y un espacio plano.",tip:"Verifiquen que el espacio esté seco y despejado antes de correr o reptar.",
+ obs:["Corre, salta y repta con coordinación.","Sigue las instrucciones y cuida su cuerpo y el de sus compañeros."]},
+7:{zone:"mueve",kind:"LANZAR",short:"Lanzo y atrapo",card:"Lanzo de distintas formas, atrapo sin dejar caer la pelota y apunto a un blanco.",chip:"SEMANA 7 · ZONA 2 · ME MUEVO",h1:"Lanzo, atrapo y apunto",sub:"Practico lanzamientos y recepciones con pelotas, aros y raquetas pequeñas.",video:"de lanzar y atrapar",stepsTitle:"Las tres habilidades",
+ steps:[["Lanzo de distintas formas","Lo hago en cucharita, por encima de la cabeza, con una mano, rodando y con rebote."],["Atrapo sin dejarla caer","En parejas o contra la pared, primero con un bote y luego sin bote. Contamos el récord."],["Apunto al blanco","Lanzo aros a un cono o pelotas a un cuadrado marcado en la pared. Cada una tiene 3 intentos."]],
+ ideas:[["Récord en pareja","Lancen y atrapen una pelota sin que caiga. ¿Cuántas veces seguidas?"],["Puntería","Marca un cuadrado en una pared con cinta y lanza tres veces con cada mano."],["Mi mano fuerte y mi otra mano","Lanza con la mano dominante y luego con la otra. ¿Cuál es más difícil?"]],
+ classes:[["CLASE 1 · LANZAR Y ATRAPAR","Juego de encestar por equipos. Lanzamientos de cucharita, por encima de la cabeza y con una mano, aumentando la distancia. Lanzar y atrapar en parejas y contra la pared. Pasa la pelota y relevo con costales."],["CLASE 2 · GOLPEAR Y APUNTAR","Habilidades con raquetas de mini tenis y pelotas: golpear, rebotar y transportar. Lanzamientos a un cuadrado en la pared y tiro al blanco con aros y conos."]],
+ matClase:"pelotas, costales, raquetas de mini tenis, cinta, aros y conos.",matCasa:"una pelota liviana, cinta de enmascarar y una pared.",tip:"Elijan una pared sin ventanas ni objetos frágiles. Celebren cada intento, no solo los aciertos.",
+ obs:["Lanza y atrapa con coordinación progresiva.","Comparte los materiales y espera su turno."]},
+8:{zone:"mueve",kind:"EQUILIBRARSE",short:"Mi equilibrio",card:"Me equilibro en distintas posturas, camino sobre conos y caigo de pie.",chip:"SEMANA 8 · ZONA 2 · ME MUEVO",h1:"Mi equilibrio y mi postura",sub:"Practico posturas, equilibrio sobre conos y caídas de pie con control.",video:"del equilibrio",stepsTitle:"Cómo me equilibro",
+ steps:[["Paro y me equilibro","Me desplazo y paro cuando escucho o veo la señal. Me quedo en puntas de pie, en ángel, en arbolito o en sillita."],["Camino sobre conos","Me subo a un cono y aguanto 3 segundos. Luego llevo un cono sobre la cabeza con una pareja."],["Caigo de pie","Salto desde poca altura a una colchoneta y caigo con las rodillas flexionadas, con el profesor cerca."]],
+ ideas:[["Arbolito","Párate en un pie durante 3 segundos. Cuenta en voz alta y cambia de pie."],["Carretilla y caballito","Con un adulto, haz la carretilla caminando con las manos mientras sostiene tus piernas."],["Cuerdas en el piso","Pon dos cuerdas largas y salta por dentro, por fuera y abriendo y cerrando las piernas."]],
+ classes:[["CLASE 1 · EQUILIBRIO ESTÁTICO","Parar bruscamente a una orden y mantener posturas. Equilibrio sobre un cono, en un pie y en los dos. Relevos con conos y escalera. Velocidad con pelota."],["CLASE 2 · AJUSTE POSTURAL","Trabajo en tríos (carretilla, caballito y sillita), cuerdas largas en el piso, equilibrio por parejas con un cono, circuito de habilidad y caída de pie sobre colchoneta."]],
+ matClase:"conos, escalera, cuerdas largas, colchonetas y pelotas.",matCasa:"un espacio plano y cuerdas.",tip:"La caída desde alturas solo se practica en el colegio, con colchonetas y el profesor. En casa, solo equilibrios en el suelo.",
+ obs:["Se equilibra y ajusta su postura al moverse.","Cuida su cuerpo y respeta las normas de seguridad."]},
+9:{zone:"mueve",kind:"RITMO Y JUEGO",short:"Palmas y rondas",card:"Aprendo rondas, juegos de palmas y juegos imitativos, y invento los míos.",chip:"SEMANA 9 · ZONA 2 · ME MUEVO",h1:"Rondas y juegos de palmas",sub:"Sigo el ritmo con mi cuerpo, juego con mis compañeras y compañeros, e invento un juego de palmas.",video:"de las rondas y las palmas",stepsTitle:"Lo que vamos a jugar",
+ steps:[["Aprendo rondas","Sigo el ritmo y la letra con mi cuerpo. Cambio de lugar y de dirección."],["Juegos de palmas","En parejas, de frente y en vertical. También jugamos pato-pato-ganso, el gato y el ratón y Don Federico."],["Invento mi juego","En grupos de 2 a 4 inventamos o cambiamos un juego de palmas y lo mostramos."]],
+ ideas:[["Palmas con un familiar","Enséñale a un familiar un juego de palmas que aprendiste."],["Cambia una parte","Cambia un movimiento o el ritmo de un juego conocido. ¿Cómo queda?"],["Ronda en familia","Hagan una ronda en el patio y turnen quién dice qué hacer."]],
+ classes:[["CLASE 1 · JUEGOS IMITATIVOS Y PALMAS","Rondas y relevo con conos y vallitas. Pato, pato, ganso. Juegos de palmas en parejas, de frente y en vertical. Zafarrancho, el cazador y el zorro."],["CLASE 2 · MI JUEGO DE PALMAS","El gato y el ratón y Don Federico. Cada grupo presenta su juego de palmas. Chucha puente y el lobo. Quien ya presentó juega con una pelota en pareja."]],
+ matClase:"aros, tapaojos, conos y pelotas.",matCasa:"solo tu cuerpo y un espacio libre.",tip:"Pídanle a su estudiante que les enseñe su juego de palmas. Es una buena forma de comunicarse y de repasar lo aprendido.",
+ obs:["Se mueve siguiendo el ritmo y se orienta en el espacio.","Colabora con su grupo y respeta las ideas de los demás."]},
+10:{zone:"mueve",kind:"CIERRE",short:"Juegos múltiples",card:"Cuatro bases de juego, un circuito de habilidad y un cierre en el que opino.",chip:"SEMANA 10 · ZONA 2 · ME MUEVO",h1:"Juegos múltiples y cierre del periodo",sub:"Uso todo lo aprendido en cuatro bases y en un circuito. Al final cuento cómo me fue.",video:"de los juegos múltiples",stepsTitle:"Las cuatro bases",
+ steps:[["Base 1 y 2","Llevo una pelota de ping pong con el cuello, como un gusano. Luego sostengo la respiración con un pitillo y llevo un fríjol a un recipiente."],["Base 3 y 4","Corro, salto el trampolín e intento encestar en un aro colgado. Después paso un obstáculo de equilibrio y encesto un aro en un cono."],["Circuito y cierre","Recorro aros, conos, cuerdas y escaleras. Termino con un juego y opino sobre el periodo."]],
+ ideas:[["Mi mejor actividad","Cuéntale a tu familia cuál actividad fue tu favorita y por qué."],["Circuito en casa","Arma un circuito con cuerdas, cojines y un balde, y recórrelo."],["Lo que ya puedo hacer","Muéstrale a tu familia un salto, un equilibrio y un lanzamiento que aprendiste."]],
+ classes:[["CLASE 1 · JUEGOS MÚLTIPLES","Cuatro bases de juego: gusano con ping pong, pitillo y fríjol, trampolín con aro colgante, y equilibrio con aro y cono. Los grupos rotan por todas."],["CLASE 2 · CIRCUITO Y CIERRE","Circuito de habilidad con aros, conos, cuerdas y escaleras (subir gateando, bajar saltando). Juego recreativo y coevaluación: cómo les pareció el periodo y qué sugerencias tienen."]],
+ matClase:"costales, trampolín, bases de equilibrio, ping pong, pitillos, fríjoles, aros, conos, cuerdas y escaleras.",matCasa:"cuerdas, cojines y un balde.",tip:"Pregúntenle qué fue lo que más le gustó y qué le costó más. Su respuesta nos ayuda a mejorar.",
+ obs:["Combina correr, saltar, lanzar, reptar y equilibrarse.","Se autoevalúa y respeta las normas y a sus compañeros."]}
+};
+
+var INTRO = {zone:"inicio",kind:"BIENVENIDA",short:"Inducción y reinducción",card:"Volvemos de vacaciones: conocemos las normas, la hidratación y los acuerdos de respeto.",h1:"Bienvenidos: así trabajamos en Educación Física",sub:"Es la primera semana después de las vacaciones de diciembre. Conocemos cómo es la clase, las normas y los acuerdos para cuidarnos y respetarnos.",video:"de bienvenida",stepsTitle:"Lo que vamos a acordar",
+ steps:[["Las normas de la clase","Llegamos a tiempo, con el uniforme y los tenis puestos. Escuchamos las señales, esperamos el turno y levantamos la mano para hablar."],["Me hidrato","El agua es parte de la clase. Traigo mi botella marcada con mi nombre y tomo agua antes, durante y después de moverme."],["Respeto y cuido","Cuido mi cuerpo, el de mis compañeros y los materiales. Usamos el espacio con calma y ayudamos a quien lo necesita."]],
+ ideas:[["Mi botella de agua","Escoge una botella, ponle tu nombre y déjala lista en tu maleta cada día de Educación Física."],["Acuerdos en familia","Elijan juntos tres acuerdos para jugar y moverse en casa, y escríbanlos en un dibujo."],["Reglas con mímica","Representa una norma de la clase sin hablar. Tu familia adivina cuál es."]],
+ classes:[["CLASE 1 · BIENVENIDOS DE NUEVO","Saludo y recorrido por los espacios de clase. Encuadre: cómo es una clase (silencio y relajación, calentamiento, tema principal, vuelta a la calma y conclusiones), uniforme, puntualidad y cómo se evalúa el periodo."],["CLASE 2 · ACUERDOS EN MOVIMIENTO","Juegos de presentación y de señales (parar, escuchar, formar). Construimos los acuerdos de clase sobre hidratación, respeto y cuidado, y los dibujamos o los representamos."]],
+ matClase:"conos, silbato o pandero, y hojas y colores para los acuerdos.",matCasa:"una botella de agua y hojas con colores.",tip:"Hablen con su estudiante sobre la importancia de tomar agua y de respetar a los demás. Revisen que lleve uniforme, tenis y botella.",
+ obs:["Reconoce y sigue los acuerdos de seguridad y cuidado de la clase.","Escucha las indicaciones, se hidrata y respeta a sus compañeros."]};
+
+var QUIZ = {zone:"mueve",kind:"QUIZ",short:"Quiz del circuito",card:"Un quiz jugado para mostrar lo que aprendí sobre mi cuerpo y mis movimientos.",h1:"Quiz del circuito: muestro lo que aprendí",sub:"Respondo preguntas sobre mi cuerpo, mi autocuidado y mis movimientos. Cada respuesta correcta enciende una estrella.",stepsTitle:"Cómo se juega",quiz:true,
+ steps:[["Leo o escucho","Leo la pregunta. Si necesito ayuda, pido a un adulto o a mi profe que me la lea."],["Elijo una respuesta","Toco la respuesta que creo correcta. Veo enseguida si acerté y por qué."],["Gano estrellas","Cada acierto enciende una estrella. Al final veo cuántas gané."]],
+ ideas:[["Repasa jugando","Señala en tu cuerpo la cabeza, el tronco, los brazos y las piernas, y busca tus articulaciones."],["Mímica de movimientos","Haz como que corres, saltas, lanzas, reptas o te equilibras. Tu familia adivina."],["Enseña lo que sabes","Explícale a un familiar cómo se atrapa una pelota y cómo se cae de pie."]],
+ classes:[["CLASE 1 · REPASO Y QUIZ","Repaso jugando de lo aprendido en las semanas 1 a 9 y quiz jugado sobre el cuerpo, el autocuidado, la lateralidad y los movimientos naturales."],["CLASE 2 · RETROALIMENTACIÓN","Revisamos juntos las respuestas, celebramos los avances y repasamos con un juego lo que costó más."]],
+ matClase:"pantalla o tablet con el quiz, conos y pelotas para el repaso.",matCasa:"solo tu cuerpo y un espacio libre.",tip:"Dejen que su estudiante responda solo. Si se equivoca, léanle la explicación y celébrenle el intento.",
+ obs:["Reconoce las partes de su cuerpo y las acciones de correr, saltar, lanzar, reptar y equilibrarse.","Participa con disposición, respeta las normas y los turnos."],
+ qs:[
+  {q:"¿Qué parte de mi cuerpo es el tronco?",o:["Mis pies y mis manos","Mi cabeza y mi cuello","Mi pecho, mi espalda y mi barriga"],a:2,why:"El tronco es el centro del cuerpo: pecho, espalda y barriga."},
+  {q:"Mis articulaciones son los lugares donde mi cuerpo se dobla. ¿Cuál es una articulación?",o:["El pelo","La rodilla","La uña"],a:1,why:"La rodilla se dobla. Otras articulaciones son el codo y el tobillo."},
+  {q:"Antes de jugar, ¿qué hago para cuidar mi cuerpo?",o:["Caliento y tomo agua","Corro sin calentar","Me quedo sin moverme"],a:0,why:"Calentar prepara mi cuerpo y el agua me mantiene hidratado."},
+  {q:"En el juego de las olas dicen «ola a la derecha». ¿Qué hago?",o:["Me quedo quieto","Salto al aro de mi derecha","Salto al aro de mi izquierda"],a:1,why:"Saltar a la derecha es saltar hacia mi lado derecho."},
+  {q:"Para atrapar una pelota, ¿qué hago?",o:["Miro la pelota y abro las manos","Cierro los ojos","Me doy la vuelta"],a:0,why:"Si miro la pelota y abro las manos, la atrapo mejor."},
+  {q:"Quiero quedarme firme como un arbolito. ¿Qué hago?",o:["Cierro los ojos y salto","Muevo mucho los brazos","Miro un punto al frente y estiro el cuerpo"],a:2,why:"Mirar un punto fijo me ayuda a mantener el equilibrio."},
+  {q:"Reptar es…",o:["Arrastrarme por el suelo como una serpiente","Saltar con los dos pies","Caminar en puntas"],a:0,why:"Reptar es avanzar con el cuerpo pegado al suelo."},
+  {q:"Una compañera se equivoca en el juego. ¿Qué hago?",o:["Me río de ella","Me voy del juego","La animo y seguimos jugando"],a:2,why:"Animar a los demás es respetarlos y cuidar el juego de todos."}
+ ]};
+
+var OLD = W; W = {};
+var MAP = {2:1,3:2,4:3,5:4,6:5,7:6,8:7,9:8,11:9,12:10};
+Object.keys(MAP).forEach(function(k){ W[+k] = OLD[MAP[k]]; });
+W[1] = INTRO; W[10] = QUIZ;
+var LAST = 12;
+var ZONE_NAME = {inicio:"PARA EMPEZAR", cuerpo:"ZONA 1 · MI CUERPO", mueve:"ZONA 2 · ME MUEVO"};
+var ORDER = [1,2,3,4,5,6,7,8,9,10,11,12];
+
+var EMBED = true;
+var VIDEOS = {
+ 2:["RcunaVx2DVg","Las partes del cuerpo para niños","Smile and Learn - Español"],
+ 3:["PSw6wj2ppGk","Higiene corporal para niños: hábitos de higiene","Smile and Learn - Español"],
+ 4:["WPzb4oO-Fbw","19 ejercicios de coordinación con aros","Entrenamiento de Handball"],
+ 5:["q8FCa4baLnU","Lateralidad: juego de derecha e izquierda, 1º de Primaria","CP Reyes Católicos Madrigal de las Altas Torres"],
+ 6:["AgRVUL-Y5jQ","Divertido juego de educación física y motricidad con aros y conos","La Simple Vida"],
+ 7:["fa5RCCeFCo8","Ejercicios de correr, saltar y reptar","U.E. Santa Rosa de Lima de Guarenas"],
+ 8:["ecQQpPaN2qA","Educación física: lanzar y atrapar","Kenyo Jumpa"],
+ 9:["1cg1CWMvFDc","Equilibrio estático y dinámico, primer ciclo de primaria","Educación Física Profe Yibraham"],
+ 11:["wLLfxjRY4Jg","5 juegos de palmas para niños","Disfruti"],
+ 12:["l1N6Lad53ok","4 circuitos motrices para Educación Física primaria","Cristhian Alexander Quintero Mogollón"]
+};
+var PLAY = '<span class="play" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 24 24" fill="var(--on-zone)"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>';
+
+function agreementsArt(){
+  var cards = [16,172,328,484].map(function(x){ return '<rect x="'+x+'" y="56" width="140" height="250" rx="20" fill="var(--surface)" stroke="var(--line)" stroke-width="2"/>'; }).join('');
+  var bottle = '<rect x="74" y="80" width="24" height="16" rx="4" fill="var(--navy)"/><rect x="60" y="96" width="52" height="130" rx="16" fill="none" stroke="var(--navy)" stroke-width="5"/><path d="M64 150 q11 -9 22 0 t22 0 V210 a10 10 0 0 1 -10 10 H74 a10 10 0 0 1 -10 -10 Z" fill="var(--agua)"/><rect x="66" y="172" width="40" height="22" rx="6" fill="var(--surface)"/><text x="86" y="188" text-anchor="middle" font-family="Fredoka, Trebuchet MS, sans-serif" font-size="15" font-weight="600" fill="var(--navy)">agua</text>';
+  var clock = '<circle cx="242" cy="155" r="62" fill="var(--surface)" stroke="var(--navy)" stroke-width="6"/><g stroke="var(--navy)" stroke-width="5" stroke-linecap="round"><line x1="242" y1="106" x2="242" y2="114"/><line x1="242" y1="196" x2="242" y2="204"/><line x1="193" y1="155" x2="201" y2="155"/><line x1="283" y1="155" x2="291" y2="155"/><line x1="242" y1="155" x2="242" y2="125"/><line x1="242" y1="155" x2="264" y2="168"/></g><circle cx="242" cy="155" r="5" fill="var(--gold)"/>';
+  var heart = '<path d="M398 218 C338 176 346 118 378 118 C390 118 398 127 398 135 C398 127 406 118 418 118 C450 118 458 176 398 218 Z" fill="var(--cuerpo)"/><path d="M372 150 q12 -18 26 -4 q14 -14 26 4" fill="none" stroke="var(--on-zone)" stroke-width="5" stroke-linecap="round"/><circle cx="450" cy="106" r="7" fill="var(--gold)"/><circle cx="346" cy="116" r="5" fill="var(--gold)"/>';
+  var cone = '<path d="M554 98 L600 220 L508 220 Z" fill="var(--gold)"/><polygon points="538.7,140 569.3,140 577,160 531,160" fill="var(--surface)"/><polygon points="523.3,180 584.7,180 590.8,196 517.2,196" fill="var(--surface)"/><rect x="496" y="220" width="116" height="14" rx="5" fill="var(--navy)"/>';
+  var caps = [[86,'Me hidrato','antes y después'],[242,'Llego a tiempo','con mi uniforme'],[398,'Respeto a','todos'],[554,'Cuido los','materiales']].map(function(c){
+    return '<text x="'+c[0]+'" y="268" text-anchor="middle" font-family="Nunito Sans, Segoe UI, sans-serif" font-size="17" font-weight="800" fill="var(--navy)">'+c[1]+'</text><text x="'+c[0]+'" y="290" text-anchor="middle" font-family="Nunito Sans, Segoe UI, sans-serif" font-size="15" fill="var(--muted)">'+c[2]+'</text>'; }).join('');
+  return '<figure class="art"><svg viewBox="0 0 640 322" role="img" aria-label="Ilustración con los cuatro acuerdos de la clase: una botella de agua, un reloj, un corazón y un cono">' +
+    '<text x="320" y="34" text-anchor="middle" font-family="Fredoka, Trebuchet MS, sans-serif" font-size="26" font-weight="600" fill="var(--navy)">Nuestros acuerdos de clase</text>' +
+    cards + bottle + clock + heart + cone + caps + '</svg><figcaption>Los cuatro acuerdos con los que empezamos el año.</figcaption></figure>';
+}
+
+function mediaBlock(n, d){
+  if (d.quiz) return '<div class="quiz" id="quiz"></div>';
+  if (n === 1) return agreementsArt();
+  var v = VIDEOS[n];
+  if (!v) return '';
+  var watch = 'https://www.youtube.com/watch?v='+v[0];
+  var meta = '<p class="note">'+v[1]+' · '+v[2]+' · <a href="'+watch+'" target="_blank" rel="noopener">Abrir en YouTube</a></p>';
+  var web = false; try { web = /^https?:$/.test(location.protocol); } catch (e) {}
+  if (EMBED && web) return '<div><div class="video yt"><iframe src="https://www.youtube-nocookie.com/embed/'+v[0]+'" title="'+v[1]+'" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>'+meta+'</div>';
+  return '<div><a class="video linkcard" href="'+watch+'" target="_blank" rel="noopener">'+PLAY+'<span>Ver el video en YouTube: '+v[1]+'</span></a><p class="note">'+v[2]+' · Se abre en una pestaña nueva. Míralo con un familiar antes de practicar.'+(EMBED ? ' Para verlo dentro de la página, publícala en un sitio web (por ejemplo GitHub Pages o Moodle).' : '')+'</p></div>';
+}
+
+
+var CHECK = ["Ropa cómoda y tenis","Agua a la mano","Movilidad articular y calentamiento","Espacio plano, seco y despejado"];
+
+function weekCard(n){
+  var d = W[n];
+  return '<li><a class="week" href="#s'+n+'" style="--zc:var(--'+d.zone+')"><div class="top"><span class="num">'+n+'</span><span class="kind">'+d.kind+'</span></div><h4>'+d.short+'</h4><p>'+d.card+'</p><span class="go">Ver la semana</span></a></li>';
+}
+
+function figure(){
+  return '<svg viewBox="-30 0 450 220" role="img" aria-label="Figura de un cuerpo con la cabeza, el tronco, los brazos, las piernas y las articulaciones señaladas">' +
+  '<g fill="none" stroke="var(--cuerpo)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">' +
+  '<line x1="200" y1="70" x2="200" y2="130" stroke-width="26"/>' +
+  '<polyline points="200,82 165,105 145,135"/><polyline points="200,82 235,105 255,135"/>' +
+  '<polyline points="200,130 185,170 180,205"/><polyline points="200,130 215,170 220,205"/></g>' +
+  '<circle cx="200" cy="40" r="24" fill="var(--cuerpo)"/>' +
+  '<g fill="var(--gold)" stroke="var(--surface)" stroke-width="3"><circle cx="165" cy="105" r="8"/><circle cx="235" cy="105" r="8"/><circle cx="185" cy="170" r="8"/><circle cx="215" cy="170" r="8"/></g>' +
+  '<g stroke="var(--muted)" stroke-width="1.5"><line x1="232" y1="40" x2="292" y2="40"/><line x1="268" y1="135" x2="292" y2="135"/><line x1="232" y1="190" x2="292" y2="190"/><line x1="108" y1="105" x2="152" y2="105"/></g>' +
+  '<g font-family="Nunito Sans, Segoe UI, sans-serif" font-size="15" font-weight="700" fill="var(--ink)">' +
+  '<text x="298" y="45">cabeza</text><text x="298" y="140">brazos</text><text x="298" y="195">piernas</text><text x="102" y="110" text-anchor="end">articulaciones</text></g></svg>';
+}
+
+function home(){
+  var z0 = [1].map(weekCard).join('');
+  var z1 = [2,3,4,5,6].map(weekCard).join('');
+  var z2 = [7,8,9,10,11,12].map(weekCard).join('');
+  var stamps = ORDER.map(function(n){ return '<li class="stamp"><i>'+n+'</i><span>'+W[n].short+'</span></li>'; }).join('');
+  return '' +
+  '<section class="wrap hero"><div><span class="chip">PERIODO 1 · GRADO 1°</span><h1>Mi cuerpo en movimiento</h1><p>En este periodo conozco mi cuerpo y practico los movimientos naturales: correr, saltar, lanzar, reptar y equilibrarme.</p><p class="ask">¿Cómo puedo reconocer mi cuerpo y moverme con seguridad para aprender y cuidar de mí?</p></div>' +
+  '<figure class="body-art">'+figure()+'<figcaption>Doce semanas: empiezo con las normas, conozco mi cuerpo y aprendo a moverme.</figcaption></figure></section>' +
+  '<section class="section" id="camino"><div class="wrap"><h2>El camino</h2><p class="lead">Cada semana tiene su tema. Toca una tarjeta para entrar.</p>' +
+  '<div class="zone" style="--zc:var(--inicio)"><div class="zone-head"><span class="zone-tag">PARA EMPEZAR</span><h3>Bienvenida</h3></div><ol class="weeks">'+z0+'</ol></div>' +
+  '<div class="zone" style="--zc:var(--cuerpo)"><div class="zone-head"><span class="zone-tag">ZONA 1</span><h3>Mi cuerpo</h3></div><ol class="weeks">'+z1+'</ol></div>' +
+  '<div class="zone" style="--zc:var(--mueve)"><div class="zone-head"><span class="zone-tag">ZONA 2</span><h3>Me muevo</h3></div><ol class="weeks">'+z2+'</ol></div></div></section>' +
+  '<section class="section" id="pasaporte"><div class="wrap"><div class="passport"><h2>Mi pasaporte de movimiento</h2><p class="lead" style="margin-top:8px">Un sello por cada semana que practico. Mi profe me lo da en clase.</p><ul class="stamps">'+stamps+'</ul><p class="note-small">Los sellos son un juego de la clase: aquí se ven vacíos hasta que el colegio los active en el campus virtual.</p></div></div></section>' +
+  '<section class="section" id="familias"><div class="wrap"><h2>Para las familias</h2><p class="lead">Cómo acompañar a su estudiante en casa durante el periodo.</p><div class="families">' +
+  '<div class="fam"><h3>Vean el video juntos</h3><p>Cada semana tiene un video corto. Mírenlo antes de practicar para saber qué se espera.</p></div>' +
+  '<div class="fam"><h3>Jueguen sin presión</h3><p>Las ideas para casa son juegos de 10 a 15 minutos, en un espacio plano, seco y despejado, con un adulto cerca.</p></div>' +
+  '<div class="fam"><h3>Celebren el intento</h3><p>Cada estudiante avanza a su ritmo. Aplaudan el esfuerzo, el cuidado y la forma de colaborar.</p></div>' +
+  '</div></div></section>';
+}
+
+function pgLink(m, dir){
+  return '<a class="pg" href="#s'+m+'"><span class="pg-dir">'+dir+'</span><span class="pg-title">Semana '+m+': '+W[m].short+'</span></a>';
+}
+
+function week(n){
+  var d = W[n];
+  var steps = d.steps.map(function(s,i){ return '<div class="card step"><span class="num">'+(i+1)+'</span><h3>'+s[0]+'</h3><p>'+s[1]+'</p></div>'; }).join('');
+  var ideas = d.ideas.map(function(s){ return '<div class="card"><h3>'+s[0]+'</h3><p>'+s[1]+'</p></div>'; }).join('');
+  var cls = d.classes.map(function(c,i){ return (i?'<hr>':'') + '<div><div class="cl">'+c[0]+'</div><p>'+c[1]+'</p></div>'; }).join('');
+  var check = CHECK.map(function(c){ return '<li>'+c+'</li>'; }).join('');
+  var prev = n > 1 ? n-1 : 0, next = n < LAST ? n+1 : 0;
+  var pg = (prev ? pgLink(prev,'Anterior') : '<span></span>') +
+           (next ? pgLink(next,'Siguiente') : '<a class="pg" href="#pasaporte"><span class="pg-dir">Final del periodo</span><span class="pg-title">Ver mi pasaporte de movimiento</span></a>');
+  return '<div style="--zc:var(--'+d.zone+')">' +
+  '<section class="week-hero"><div class="wrap"><a class="crumb" href="#inicio" style="color:var(--on-zone)">← Volver al camino del periodo</a><span class="chip">SEMANA '+n+' · '+ZONE_NAME[d.zone]+'</span><h1>'+d.h1+'</h1><p>'+d.sub+'</p></div></section>' +
+  '<section class="week-main"><div class="wrap"><div class="col">' +
+  mediaBlock(n,d) +
+  '<div class="block"><h2>'+d.stepsTitle+'</h2><div class="cards3">'+steps+'</div></div>' +
+  '<div class="block"><div class="block-head"><h2>Practica en casa</h2><span class="chip">IDEAS PARA CASA</span></div><div class="cards3">'+ideas+'</div></div>' +
+  '<div class="eval"><h2>¿Cómo me fue?</h2><p class="hint">Toca la opción que mejor te describe.</p><div class="opts" role="group" aria-label="¿Cómo me fue?"><button type="button" aria-pressed="false">Lo estoy intentando</button><button type="button" aria-pressed="false">Lo hago con ayuda</button><button type="button" aria-pressed="false">¡Lo domino!</button></div><p class="own">Es solo para ti: tu respuesta no se guarda.</p></div>' +
+  '<nav class="pager" aria-label="Cambiar de semana">'+pg+'</nav></div>' +
+  '<aside class="side" aria-label="Información de la semana"><div class="panel"><h2>Esta semana</h2>'+cls+'</div>' +
+  '<div class="panel"><h2>Lo que mi profe observa</h2><div><div class="cl">COMPETENCIA</div><p>'+d.obs[0]+'</p></div><hr><div><div class="cl">ACTITUD</div><p>'+d.obs[1]+'</p></div></div>' +
+  '<div class="panel"><h2>Antes de practicar</h2><ul class="check">'+check+'</ul><p>Al terminar: estiramiento e hidratación.</p></div>' +
+  '<div class="panel"><h2>Materiales</h2><p><strong>En clase:</strong> '+d.matClase+'</p><p><strong>En casa:</strong> '+d.matCasa+'</p></div>' +
+  '<div class="panel tip"><h2>Para las familias</h2><p>'+d.tip+'</p></div></aside></div></section></div>';
+}
+
+
+var STAR = '<path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/>';
+function starsRow(score, total){
+  var out = '';
+  for (var i = 0; i < total; i++) {
+    var on = i < score;
+    out += '<svg viewBox="0 0 24 24" aria-hidden="true" fill="'+(on?'var(--gold)':'none')+'" stroke="'+(on?'var(--gold)':'var(--muted)')+'" stroke-width="1.6" stroke-linejoin="round">'+STAR+'</svg>';
+  }
+  return '<div class="qstars" role="img" aria-label="Estrellas ganadas: '+score+' de '+total+'">'+out+'</div>';
+}
+function startQuiz(){
+  var box = document.getElementById('quiz');
+  if (!box) return;
+  var qs = QUIZ.qs, i = 0, score = 0, locked = false;
+  function ask(){
+    var q = qs[i]; locked = false;
+    var opts = q.o.map(function(t,k){ return '<button type="button" class="qopt" data-k="'+k+'"><span class="k">'+'ABC'.charAt(k)+'</span><span>'+t+'</span></button>'; }).join('');
+    box.innerHTML = '<div class="qhead"><span class="chip">PREGUNTA '+(i+1)+' DE '+qs.length+'</span>'+starsRow(score, qs.length)+'</div>' +
+      '<h2 id="qtext" tabindex="-1">'+q.q+'</h2><div class="qopts" role="group" aria-labelledby="qtext">'+opts+'</div><p class="qfb" aria-live="polite"></p><div id="qnext"></div>';
+    box.querySelector('#qtext').focus();
+    box.querySelectorAll('.qopt').forEach(function(b){ b.addEventListener('click', function(){ pick(+b.getAttribute('data-k')); }); });
+  }
+  function pick(k){
+    if (locked) return; locked = true;
+    var q = qs[i], ok = (k === q.a);
+    if (ok) score++;
+    box.querySelectorAll('.qopt').forEach(function(b){
+      var bk = +b.getAttribute('data-k');
+      if (bk === q.a) b.classList.add('good'); else if (bk === k) b.classList.add('miss');
+    });
+    box.querySelector('.qfb').textContent = (ok ? '¡Muy bien! ' : 'Casi. La respuesta correcta es la marcada. ') + q.why;
+    var last = (i === qs.length - 1);
+    box.querySelector('#qnext').innerHTML = '<button type="button" class="qbtn" id="qgo">'+(last ? 'Ver mis estrellas' : 'Siguiente pregunta')+'</button>';
+    var head = box.querySelector('.qstars'); if (head) head.outerHTML = starsRow(score, qs.length);
+    document.getElementById('qgo').addEventListener('click', function(){ if (last) done(); else { i++; ask(); } });
+    document.getElementById('qgo').focus();
+  }
+  function done(){
+    var msg = score >= 7 ? '¡Lo dominas! Mostraste muy bien lo que aprendiste.' : score >= 5 ? '¡Muy bien! Vas por muy buen camino.' : 'Gracias por jugar. Sigue practicando y vuelve a intentarlo, ¡tú puedes!';
+    box.innerHTML = '<div class="qdone"><span class="chip">FIN DEL QUIZ</span>'+starsRow(score, qs.length)+'<h2 id="qtext" tabindex="-1">Ganaste '+score+' de '+qs.length+' estrellas</h2><p>'+msg+'</p><button type="button" class="qbtn" id="qagain">Jugar otra vez</button><p class="note-small">Las estrellas no se guardan en esta página.</p></div>';
+    box.querySelector('#qtext').focus();
+    document.getElementById('qagain').addEventListener('click', function(){ i = 0; score = 0; ask(); });
+  }
+  ask();
+}
+
+function render(){
+  var h = (location.hash || '').replace('#','');
+  var view = document.getElementById('view');
+  var m = /^s(\d+)$/.exec(h);
+  if (m && W[+m[1]]) {
+    view.innerHTML = week(+m[1]);
+    var btns = view.querySelectorAll('.eval button');
+    btns.forEach(function(b){
+      b.addEventListener('click', function(){
+        btns.forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+        b.setAttribute('aria-pressed','true');
+      });
+    });
+    startQuiz();
+    window.scrollTo(0,0);
+    document.title = 'Semana '+m[1]+' · '+W[+m[1]].short;
+  } else {
+    view.innerHTML = home();
+    document.title = 'Mi cuerpo en movimiento';
+    if (h === 'pasaporte' || h === 'familias' || h === 'camino') {
+      var el = document.getElementById(h);
+      if (el) el.scrollIntoView();
+    } else { window.scrollTo(0,0); }
+  }
+}
+window.addEventListener('hashchange', render);
+render();
+</script>
+</body></html>
